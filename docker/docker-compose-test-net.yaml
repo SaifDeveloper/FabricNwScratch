@@ -128,8 +128,8 @@ services:
     networks:
       - test
   
-  cli:
-    container_name: cli
+  cliorg1:
+    container_name: cliorg1
     image: hyperledger/fabric-tools:$IMAGE_TAG
     tty: true
     stdin_open: true
@@ -137,15 +137,66 @@ services:
       - GOPATH=/opt/gopath
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_ID=cliorg1
+      - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_TLS_ENABLED=true
+      - PEER0_ORG1_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt 
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+      - ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+      - FABRIC_CFG_PATH=opt/gopath/src/github.com/hyperledger/fabric/peer/configtx
       #- FABRIC_LOGGING_SPEC=DEBUG
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
     volumes:
         - /var/run/:/host/var/run/
-        - ../organizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations
+        - ../organizations/peerOrganizations/org1.example.com:/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org1.example.com
+        - ../organizations/ordererOrganizations/example.com:/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/ordererOrganizations/example.com
         - ../scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        - ../channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts/
+        - ../bin:/opt/gopath/src/github.com/hyperledger/fabric/peer/bin/
+        - ../configtx:/opt/gopath/src/github.com/hyperledger/fabric/peer/configtx/
+        - ../../config/:/opt/gopath/src/github.com/hyperledger/fabric/config/
+        - ../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode
     depends_on:
       - peer0.org1.example.com
+    networks:
+      - test
+
+  cliorg2:
+    container_name: cliorg2
+    image: hyperledger/fabric-tools:$IMAGE_TAG
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_ID=cliorg2
+      - CORE_PEER_ADDRESS=peer0.org2.example.com:9051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_TLS_ENABLED=true
+      - PEER0_ORG2_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt 
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
+      - ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+      - FABRIC_CFG_PATH=opt/gopath/src/github.com/hyperledger/fabric/peer/configtx
+      #- FABRIC_LOGGING_SPEC=DEBUG
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../organizations/peerOrganizations/org2.example.com:/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org2.example.com
+        - ../organizations/ordererOrganizations/example.com:/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/ordererOrganizations/example.com
+        - ../scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        - ../channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts/
+        - ../bin:/opt/gopath/src/github.com/hyperledger/fabric/peer/bin/
+        - ../configtx:/opt/gopath/src/github.com/hyperledger/fabric/peer/configtx/
+        - ../../config/:/opt/gopath/src/github.com/hyperledger/fabric/config/
+        - ../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode
+    depends_on:
       - peer0.org2.example.com
     networks:
       - test
+      
