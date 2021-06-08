@@ -158,6 +158,8 @@ services:
         - ../bin:/opt/gopath/src/github.com/hyperledger/fabric/peer/bin/
         - ../configtx:/opt/gopath/src/github.com/hyperledger/fabric/peer/configtx/
         - ../../config/:/opt/gopath/src/github.com/hyperledger/fabric/config/
+        - ../ccPackages/:/opt/gopath/src/github.com/hyperledger/fabric/peer/ccPackages
+        - ../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode
     depends_on:
       - peer0.org1.example.com
     networks:
@@ -193,6 +195,8 @@ services:
         - ../bin:/opt/gopath/src/github.com/hyperledger/fabric/peer/bin/
         - ../configtx:/opt/gopath/src/github.com/hyperledger/fabric/peer/configtx/
         - ../../config/:/opt/gopath/src/github.com/hyperledger/fabric/config/
+        - ../ccPackages/:/opt/gopath/src/github.com/hyperledger/fabric/peer/ccPackages
+        - ../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode
     depends_on:
       - peer0.org2.example.com
     networks:
